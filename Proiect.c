@@ -21,7 +21,6 @@ void type(const char* path);
 void forkFunction(char *command, char **command_list);
 void modifyList(char ** command_list, char **command_list1, char **command_list2);
 void Run(char *command, char** command_list);
-int check(char **command_list);
 
 int main(){
     char command[200];
@@ -81,25 +80,7 @@ int main(){
 
     }
     
-    else if (strcmp(commandList[0],"help") == 0){
-        if(commandList[1] == NULL)
-            printf("Type 'help name' to find out more about function 'name'\n Available functions: \nexit\npwd\ncd\ntype\ncreate\nrun\n" );
-        else if(strcmp(commandList[1], "pwd") == 0){
-            printf("pwd:\n\tPrint the name of the current working directory\n");
-            }
-        else if(strcmp(commandList[1], "cd") == 0){
-            printf("cd:\n\tcd - change working directory\nSYNOPSIS\n\tcd [const char *path]\n");
-            }
-        else if(strcmp(commandList[1], "type") == 0){
-            printf("type:\n\ttype -displays the type of the given entry (absolute or relative path)\nSYNOPSIS\n\ttype [const char *path]\n");
-            }
-        else if(strcmp(commandList[1], "run") == 0){
-            printf("run:\n\trun -execute commands available in linux\nSYNOPSIS\n\trun command OR run command1 | command2\n");
-            }
-        else if(strcmp(commandList[1], "create") == 0){
-            printf("create:\n\tcreate -creates a new entry of the given <type>\nSYNOPSIS\n\tcreate <type> [const char *path]\nTYPES:\n\t-f regular file\n\t-d directory\n\t-l symbolic link (Input file then output file)\n");
-            }
-        }
+
     printf("\033[1;32m");
             printf("User:");
             printf("\033[1;34m");
@@ -370,14 +351,4 @@ void Run(char *command, char** command_list)
     } 
  
     }
-}
-
-int check(char **command_list)
-{
-    for(int i = 0 ; command_list[i] != NULL; i++)
-    {
-        if(strcmp(command_list[i], "|") == 0)
-            return 0;
-    }
-    return 1;
 }
