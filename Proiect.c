@@ -82,6 +82,7 @@ int main(){
 
     }
     
+            //how the command works
     else if (strcmp(commandList[0],"help") == 0){
         if(commandList[1] == NULL)
             printf("Type 'help name' to find out more about function 'name'\n Available functions: \nexit\npwd\ncd\ntype\ncreate\nrun\n" );
@@ -121,6 +122,7 @@ int main(){
     return 0;
 }
 
+//print the current work directory
 void pwd() {
        char cwd[256];
    if (getcwd(cwd, sizeof(cwd)) != NULL) {
@@ -130,6 +132,7 @@ void pwd() {
    }
 }
 
+//change directory
 void CreateDIr(const char *directory_name, const char *path){
     char cwd[256] = "";
     char cwd1[256];
@@ -162,9 +165,14 @@ void CreateDIr(const char *directory_name, const char *path){
     if( mkdir(cwd, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
     
     perror("Directory wasn't created\n");
+    
+//S_IRWXU - Read and write permission bit for the owner of the file
+//S_IRWXG - Read and write permission bit for the group owner of the file
+//S_IROTH - Read permission bit for other users
+//S_IXOTH - Execute permission bit for other users
 
 }
-
+//create a regular file
 void createRegular(const char *file_name, const char *path) {
 
        char cwd[256] = "";
@@ -201,7 +209,9 @@ void createRegular(const char *file_name, const char *path) {
 else
     open(cwd, O_CREAT, S_IRWXU);
 }
+//S_IREAD - Read permission bit for the owner of the file
 
+// check what kind of file shall be created and where if the path is provided
 void createFile (const char *input_path, const char *file_type, const char *path) {
 
     if(strcmp(file_type, "-f") == 0){
@@ -224,7 +234,7 @@ void createFile (const char *input_path, const char *file_type, const char *path
         
 }
 
-
+//pharse the command
 char** getComand ( char *input_line) {
     char **array;
     char *p;
@@ -244,7 +254,7 @@ char** getComand ( char *input_line) {
     return array;
 }
 
-
+//print wich kind of type is the path
 void type(const char* path) {
     if( lstat(path, &file_info) == -1)
         perror("type()");
@@ -259,6 +269,7 @@ void type(const char* path) {
         printf("%s: Link file\n", path);
 }
 
+//this function is made in order to tun a command without pipe
 void forkFunction(char *command, char **command_list)
 {
     int pid;
@@ -287,6 +298,7 @@ void forkFunction(char *command, char **command_list)
     }
 }
 
+//exclude the run word from the command
 void modifyList(char ** command_list, char **command_list1, char **command_list2)
 {
 
@@ -309,6 +321,7 @@ void modifyList(char ** command_list, char **command_list1, char **command_list2
         command_list2[j] = NULL;
 }
 
+// Run an command with pipe
 void Run(char *command, char** command_list)
 {
     pid_t pid1;
@@ -337,8 +350,8 @@ void Run(char *command, char** command_list)
     }
 
     if (pid1 == 0){
-        close(STDOUT_FILENO);
-        dup(pfd[1]);
+        close(STDOUT_FILENO); //block the standard output
+        dup(pfd[1]); //create another file descriptor that point to the same as pfd[1]
         close(pfd[0]);
         close(pfd[1]);
 
@@ -373,6 +386,7 @@ void Run(char *command, char** command_list)
     }
 }
 
+//check the next command is a pipe or not
 int check(char **command_list)
 {
     for(int i = 0 ; command_list[i] != NULL; i++)
